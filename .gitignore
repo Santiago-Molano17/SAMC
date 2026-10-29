@@ -8,9 +8,12 @@ venv/
 *.env
 !.env.example
 
-# Archivos subidos por usuarios (pueden ser malware o datos personales)
-Backend/uploads/*
-!Backend/uploads/.gitkeep
+# Almacenamiento local: muestras analizadas, fotos de perfil y archivos de la v1
+storage/*
+!storage/.gitkeep
+
+# Configuración local del editor y herramientas
+.claude/
 
 # Documentos académicos y temporales
 *.docx

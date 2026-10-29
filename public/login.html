@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión · SACM</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="/assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="/assets/css/public.css">
+    <script type="module" src="/assets/js/auth/login.js"></script>
+</head>
+<body>
+    <div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+    <button class="btn btn--icon theme-fab" data-theme-toggle aria-label="Cambiar tema"></button>
+
+    <main class="auth">
+        <section class="auth__visual">
+            <a class="brand" href="/">
+                <span class="brand__logo" data-icon="shield-check"></span>
+                <span class="brand__name">SACM</span>
+            </a>
+            <div>
+                <div class="radar" aria-hidden="true">
+                    <span class="radar__dot"></span><span class="radar__dot"></span><span class="radar__dot"></span>
+                    <span class="radar__core" data-icon="shield"></span>
+                </div>
+                <div class="auth__headline">
+                    <h1>Detecta amenazas <span class="gradient-text">antes de que se ejecuten.</span></h1>
+                    <p>Análisis estático, reglas mapeadas a MITRE ATT&amp;CK e inteligencia de VirusTotal, abuse.ch y CIRCL en una sola plataforma.</p>
+                </div>
+            </div>
+            <div class="auth__stats">
+                <div><strong>70+</strong>motores antivirus</div>
+                <div><strong>25</strong>reglas de comportamiento</div>
+                <div><strong>4</strong>roles con permisos</div>
+            </div>
+        </section>
+
+        <section class="auth__panel">
+            <div class="auth__form-head">
+                <h2>Bienvenido de nuevo</h2>
+                <p>Ingresa con tu cuenta para continuar.</p>
+            </div>
+
+            <div data-slot="alert"></div>
+
+            <form class="form auth__form" id="login-form" novalidate>
+                <label class="field">
+                    <span class="field__label">Correo electrónico</span>
+                    <span class="input-group">
+                        <span data-icon="mail"></span>
+                        <input class="input" type="email" name="email" autocomplete="username" placeholder="tu@empresa.com" required>
+                    </span>
+                </label>
+                <label class="field">
+                    <span class="field__label">Contraseña</span>
+                    <span class="input-group">
+                        <span data-icon="lock"></span>
+                        <input class="input" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+                        <button class="btn btn--ghost btn--icon btn--sm input-group__action" type="button" data-toggle-password aria-label="Mostrar contraseña"></button>
+                    </span>
+                </label>
+                <button class="btn btn--primary btn--lg btn--block" type="submit">Iniciar sesión</button>
+            </form>
+
+            <p class="auth__switch">¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+            <div class="auth__note">
+                <strong>Seguridad:</strong> tras 5 intentos fallidos la cuenta se bloquea 15 minutos. La sesión se guarda en una cookie protegida, nunca en el navegador.
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear cuenta · SACM</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="/assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="/assets/css/public.css">
+    <script type="module" src="/assets/js/auth/register.js"></script>
+</head>
+<body>
+    <div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+    <button class="btn btn--icon theme-fab" data-theme-toggle aria-label="Cambiar tema"></button>
+
+    <main class="auth">
+        <section class="auth__visual">
+            <a class="brand" href="/">
+                <span class="brand__logo" data-icon="shield-check"></span>
+                <span class="brand__name">SACM</span>
+            </a>
+            <div class="auth__headline">
+                <h1>Únete y analiza <span class="gradient-text">cualquier archivo</span> en segundos.</h1>
+                <p>Sube un archivo sospechoso y recibe un reporte claro: qué es, qué haría en tu equipo y qué tan peligroso es.</p>
+            </div>
+            <div class="auth__stats">
+                <div><strong>0</strong>archivos ejecutados</div>
+                <div><strong>100%</strong>explicable</div>
+                <div><strong>OWASP</strong>buenas prácticas</div>
+            </div>
+        </section>
+
+        <section class="auth__panel">
+            <div class="auth__form-head">
+                <h2>Crea tu cuenta</h2>
+                <p>Tendrás el rol de usuario; un administrador puede asignarte otro.</p>
+            </div>
+
+            <div data-slot="alert"></div>
+
+            <form class="form auth__form" id="register-form" novalidate>
+                <label class="field">
+                    <span class="field__label">Nombre completo</span>
+                    <input class="input" name="fullName" autocomplete="name" placeholder="Tu nombre y apellido" required minlength="3">
+                </label>
+                <label class="field">
+                    <span class="field__label">Correo electrónico</span>
+                    <input class="input" type="email" name="email" autocomplete="email" placeholder="tu@empresa.com" required>
+                </label>
+                <label class="field">
+                    <span class="field__label">Contraseña</span>
+                    <input class="input" type="password" name="password" autocomplete="new-password" required minlength="8">
+                    <span class="field__hint">Mínimo 8 caracteres, con mayúsculas, minúsculas y números.</span>
+                </label>
+                <label class="field">
+                    <span class="field__label">Confirmar contraseña</span>
+                    <input class="input" type="password" name="confirmPassword" autocomplete="new-password" required>
+                </label>
+                <button class="btn btn--primary btn--lg btn--block" type="submit">Crear cuenta</button>
+            </form>
+
+            <p class="auth__switch">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+        </section>
+    </main>
+</body>
+</html>

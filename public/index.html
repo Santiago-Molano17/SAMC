@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SACM · Sistema de Análisis y Control de Malware</title>
+    <meta name="description" content="Plataforma de análisis de malware con inteligencia de amenazas, reglas MITRE ATT&CK y analítica para equipos de seguridad.">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="/assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="/assets/css/public.css">
+    <script type="module" src="/assets/js/landing.js"></script>
+</head>
+<body>
+    <div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <header class="public-nav">
+        <a class="brand" href="/">
+            <span class="brand__logo" data-icon="shield-check"></span>
+            <span class="brand__name">SACM</span>
+        </a>
+        <nav class="public-nav__links">
+            <a class="btn btn--ghost" href="#funciones">Funciones</a>
+            <a class="btn btn--ghost" href="#roles">Roles</a>
+            <button class="btn btn--ghost btn--icon" data-theme-toggle aria-label="Cambiar tema"></button>
+            <a class="btn" href="/login" data-slot="login-link">Iniciar sesión</a>
+            <a class="btn btn--primary" href="/register" data-slot="cta-link">Crear cuenta</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <span class="hero__eyebrow">Análisis de malware · Inteligencia de amenazas</span>
+                <h1>Descubre qué hace un archivo <span class="gradient-text">sin tener que abrirlo.</span></h1>
+                <p class="hero__lead">SACM inspecciona la estructura real de cada archivo, aplica reglas mapeadas a MITRE ATT&amp;CK y consulta su reputación en VirusTotal, MalwareBazaar, URLhaus y CIRCL. El resultado: un veredicto explicable en segundos.</p>
+                <div class="hero__cta">
+                    <a class="btn btn--primary btn--lg" href="/register" data-slot="hero-cta"><span data-icon="upload"></span> Analizar un archivo</a>
+                    <a class="btn btn--lg" href="#funciones">Ver cómo funciona</a>
+                </div>
+                <div class="hero__trust">
+                    <span><span data-icon="lock"></span> Sesión en cookie httpOnly</span>
+                    <span><span data-icon="shield-check"></span> CSP estricta, sin scripts en línea</span>
+                    <span><span data-icon="scroll"></span> Auditoría completa</span>
+                </div>
+            </div>
+
+            <div class="console" aria-hidden="true">
+                <div class="console__bar"><i></i><i></i><i></i><span>sacm · analizando factura_octubre.pdf.exe</span></div>
+                <div class="console__body" data-slot="console"></div>
+            </div>
+        </section>
+
+        <section class="section" id="funciones">
+            <div class="section__head">
+                <h2>Todo lo que un analista necesita, en un solo lugar</h2>
+                <p>Desde el primer envío hasta el cierre de la investigación.</p>
+            </div>
+            <div class="features" data-reveal>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="fingerprint"></div><h3>Análisis estático real</h3><p>Identifica el tipo verdadero por sus bytes, detecta ejecutables disfrazados, doble extensión, macros, entropía y lee cabeceras PE e importaciones.</p></article>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="target"></div><h3>Reglas + MITRE ATT&amp;CK</h3><p>Más de 20 reglas de comportamiento (ransomware, inyección, persistencia, robo de credenciales…) vinculadas a técnicas de ATT&amp;CK.</p></article>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="globe"></div><h3>Inteligencia de amenazas</h3><p>Consulta VirusTotal (70+ antivirus), MalwareBazaar, URLhaus y CIRCL usando solo el hash, sin exponer el contenido.</p></article>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="gauge"></div><h3>Puntaje explicable</h3><p>Cada punto de riesgo muestra de dónde viene. Nada de cajas negras: el analista sabe exactamente por qué.</p></article>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="bar-chart"></div><h3>Analítica de tendencias</h3><p>Evolución diaria, familias, tácticas de ATT&amp;CK, mapa de calor, desempeño de motores y exportación CSV.</p></article>
+                <article class="card card--interactive feature"><div class="feature__icon" data-icon="briefcase"></div><h3>Casos e IOC</h3><p>Agrupa análisis en investigaciones, registra la bitácora y pivota entre muestras por dominios, IP o rutas compartidas.</p></article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section__head">
+                <h2>Conectado a las fuentes que usa la industria</h2>
+                <p>Se activan con una API key gratuita desde el archivo de configuración.</p>
+            </div>
+            <div class="integrations-strip">
+                <div class="card"><span data-icon="shield"></span> VirusTotal</div>
+                <div class="card"><span data-icon="bug"></span> MalwareBazaar</div>
+                <div class="card"><span data-icon="globe"></span> URLhaus</div>
+                <div class="card"><span data-icon="database"></span> CIRCL hashlookup</div>
+                <div class="card"><span data-icon="target"></span> MITRE ATT&amp;CK</div>
+            </div>
+        </section>
+
+        <section class="section" id="roles">
+            <div class="section__head">
+                <h2>Cuatro roles, permisos claros</h2>
+                <p>Control de acceso basado en roles aplicado en cada ruta de la API.</p>
+            </div>
+            <div class="roles">
+                <article class="card role-card"><span class="role-card__level">Nivel 1</span><h3>Usuario</h3><ul><li>Envía archivos</li><li>Consulta sus resultados</li><li>Edita su perfil</li></ul></article>
+                <article class="card role-card"><span class="role-card__level">Nivel 2</span><h3>Analista</h3><ul><li>Cola de revisión</li><li>Analítica y tendencias</li><li>Casos e IOC</li></ul></article>
+                <article class="card role-card"><span class="role-card__level">Nivel 3</span><h3>Administrador</h3><ul><li>Gestiona usuarios y analistas</li><li>Auditoría</li><li>Estado del sistema</li></ul></article>
+                <article class="card role-card"><span class="role-card__level">Nivel 4</span><h3>Super administrador</h3><ul><li>Gestiona administradores</li><li>Prueba integraciones</li><li>Control total</li></ul></article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card cta-band">
+                <h2>¿Tienes un archivo sospechoso?</h2>
+                <p>Crea tu cuenta y obtén un reporte completo en segundos.</p>
+                <a class="btn btn--primary btn--lg" href="/register" data-slot="band-cta">Empezar ahora</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span>SACM v2 · Proyecto de Fundamentos de Seguridad Informática</span>
+        <span>Node.js · Express · MySQL · Chart.js</span>
+    </footer>
+</body>
+</html>

@@ -1,128 +1,173 @@
-# SACM: Sistema de Análisis y Control de Malware
+# 🛡️ SACM: Sistema de Análisis y Control de Malware
 
-Plataforma web para subir archivos y obtener un **análisis heurístico de malware**: tipo de amenaza, porcentaje de riesgo, comportamientos detectados, áreas del sistema afectadas y recomendaciones. Incluye control de acceso por roles, un panel administrativo con estadísticas y un registro de actividad.
+Plataforma web para **analizar archivos sospechosos sin ejecutarlos**. Combina análisis estático propio, reglas de comportamiento mapeadas a **MITRE ATT&CK** e inteligencia de amenazas de **VirusTotal, MalwareBazaar, URLhaus y CIRCL**. El resultado es un veredicto con un puntaje de riesgo **explicable**: cada punto indica de dónde viene.
 
-Es un proyecto académico de **Fundamentos de Seguridad Informática**, construido siguiendo buenas prácticas de OWASP.
+Incluye un centro de trabajo para analistas (cola de revisión, analítica de tendencias, casos de investigación y explorador de IOC), gestión de usuarios con 4 roles y auditoría completa.
 
-> ⚠️ SACM es una herramienta educativa. El motor usa firmas y heurísticas simples; **no reemplaza un antivirus**.
+> Proyecto académico de Fundamentos de Seguridad Informática, construido siguiendo buenas prácticas de OWASP.
 
 <!-- Agrega aquí tus capturas, por ejemplo:
-![Panel administrativo](docs/capturas/admin-dashboard.png)
-![Resultado de un análisis](docs/capturas/analisis.png)
+![Panel del analista](docs/capturas/panel.png)
+![Reporte de análisis](docs/capturas/reporte.png)
+![Analítica](docs/capturas/analitica.png)
 -->
 
-## Funcionalidades
+## ✨ Qué hace
 
-- **Análisis de archivos:** combina tres señales con pesos (extensión 40 %, nombre 30 %, contenido 30 %) para clasificar Trojan, Ransomware, Spyware, Worm o Rootkit y asignar un nivel de riesgo (Low → Critical).
-- **Simulación de impacto:** muestra los procesos y archivos que la amenaza afectaría y una línea de tiempo del ataque.
-- **Cuatro roles:** `SUPER_ADMIN`, `ADMIN`, `ANALYST` y `USER`, cada uno con permisos distintos.
-- **Panel administrativo:** estadísticas, gráficas por tipo de malware y nivel de riesgo, gestión de usuarios, perfiles, logs y reportes.
-- **Panel de usuario:** subir archivos, ver el historial propio y el detalle de cada análisis.
-- **Base de conocimiento:** catálogo de familias de malware conocidas.
-
-## Seguridad implementada
-
-| Control | Cómo se implementa |
+### Motor de análisis
+| Capa | Qué revisa |
 |---|---|
-| Autenticación | JWT firmado con `issuer`/`audience` y expiración de 24 h |
-| Contraseñas | Hash con **bcrypt** (12 rondas) y política de complejidad |
-| Autorización | Middleware de roles en cada ruta (RBAC) |
-| IDOR | Un `USER` solo puede consultar sus propios análisis |
-| XSS | Escape de todo dato controlado por el usuario antes de renderizarlo |
-| Inyección SQL | Consultas parametrizadas en todas las rutas (`mysql2`) |
-| Subida de archivos | Límite de tamaño, nombres saneados (sin path traversal) |
-| Cabeceras HTTP | `helmet` |
-| Fuerza bruta / DoS | `express-rate-limit` (100 peticiones cada 15 min por IP) |
-| Auditoría | Registro de actividad en `activity_logs` |
-| Secretos | Variables de entorno (`.env` fuera del repositorio) |
+| **Identificación real** | Detecta el tipo por sus *bytes mágicos* (PE, ELF, Mach-O, PDF, Office, ZIP, APK, scripts…), no por la extensión. Encuentra ejecutables disfrazados, doble extensión (`factura.pdf.exe`) y el truco del carácter RTLO. |
+| **Análisis estático** | MD5/SHA-1/SHA-256, entropía de Shannon (global y por bloques), macros VBA, cabeceras PE (arquitectura, secciones W+X, empaquetadores como UPX, importaciones y *overlay*). |
+| **Cadenas e IOC** | Extrae cadenas ASCII/UTF-16 y de ellas URLs, dominios, IP, correos, claves de registro, rutas y billeteras, filtrando dominios legítimos. |
+| **25 reglas + MITRE ATT&CK** | Inyección de procesos, keyloggers, ransomware, robo de credenciales, persistencia, PowerShell ofuscado, macros, PDF con JavaScript, binarios LOLBins, mineros y más. Cada regla está vinculada a técnicas de ATT&CK. |
+| **Inteligencia externa** | **VirusTotal** (70+ antivirus), **MalwareBazaar** (malware confirmado), **URLhaus** (reputación de los dominios/IP del archivo) y **CIRCL hashlookup** (software legítimo conocido, NSRL). Se consulta con el *hash*; el contenido no sale del servidor. |
+| **Puntaje explicable** | Combina todas las señales: suma puntos por reglas, fija mínimos por evidencia fuerte (por ejemplo, 10 antivirus lo detectan → ≥92) y **resta** cuando el archivo es software legítimo conocido. Calcula también la confianza según cuántas fuentes respondieron. |
 
-## Tecnologías
+Los análisis corren **en segundo plano** (cola con concurrencia limitada) y la interfaz muestra el progreso en tiempo real. Las muestras se guardan **neutralizadas** (XOR) para que nadie pueda ejecutarlas por accidente.
 
-**Backend:** Node.js, Express 5, MySQL (`mysql2`), JWT, bcryptjs, Multer, Helmet
-**Frontend:** HTML, CSS, JavaScript, Bootstrap 5, Chart.js, Font Awesome
-**Base de datos:** MySQL 8
+### Por rol
+| Rol | Puede |
+|---|---|
+| **Usuario** | Subir archivos, ver sus análisis y reportes, editar su perfil y foto. |
+| **Analista** | Todo lo anterior, más: **cola de revisión** (confirmar o corregir veredictos), **analítica** (evolución diaria, familias, tácticas ATT&CK en radar, histograma de riesgo, mapa de calor día/hora, desempeño de motores, falsos positivos/negativos, exportación CSV y gráficas en PNG), **casos de investigación** (tablero kanban, bitácora, responsables) y **explorador de IOC** (pivotar entre muestras que comparten dominios o IP). |
+| **Administrador** | Gestionar usuarios y analistas, ver la **auditoría** y el estado del **sistema**. |
+| **Super administrador** | Todo, incluidos otros administradores y la prueba de las integraciones. |
 
-## Estructura
+Cada usuario ve arriba a la izquierda su **foto, nombre y rol**, y tiene su sección **Mi perfil** para editar datos, cambiar la contraseña y subir su foto.
+
+## 🔐 Seguridad implementada
+
+| Control | Implementación |
+|---|---|
+| Sesión | JWT en **cookie httpOnly + SameSite=Strict** (JavaScript nunca ve el token). Se invalida al cambiar la contraseña o suspender la cuenta. |
+| Contraseñas | **bcrypt** (12 rondas), política de complejidad y comparación en tiempo constante aunque el correo no exista. |
+| Fuerza bruta | Bloqueo de la cuenta 15 min tras 5 intentos y *rate limiting* por IP en login, registro, API y subidas. |
+| Autorización | **RBAC** jerárquico en cada ruta; un admin no puede gestionar admins y siempre queda al menos un super admin. |
+| IDOR | Un usuario solo accede a sus análisis; los demás reciben 404 (no se revela que existen). |
+| XSS | Plantillas que **escapan todo por defecto** + **CSP estricta** (`script-src 'self'`, sin scripts en línea ni CDNs). |
+| Inyección SQL | Consultas parametrizadas en todo el código. |
+| Validación | Esquemas **zod** para cuerpo, parámetros y consultas. |
+| Archivos | Límite de tamaño, nombre saneado, almacenamiento por hash y fotos validadas por contenido real (no por extensión). |
+| CSV | Protección contra inyección de fórmulas al abrir en Excel. |
+| Cabeceras | `helmet` (CSP, HSTS en producción, `nosniff`, `frame-ancestors 'none'`…). |
+| Auditoría | Registro de logins (exitosos y fallidos), cambios de rol, revisiones, casos y exportaciones con IP y navegador. |
+| Errores | Los mensajes internos nunca llegan al cliente. |
+
+## 🧱 Arquitectura
 
 ```
 SACM/
-├── Backend/
-│   ├── server.js              # Servidor Express
-│   ├── db.js                  # Conexión MySQL
-│   ├── create-admin.js        # Crea el super admin inicial
-│   ├── analyze_samples.js     # Analiza las muestras de prueba
-│   ├── middleware/            # JWT, roles y logs de actividad
-│   ├── routes/                # auth, files (subida/análisis), dashboard
-│   └── services/
-│       └── malwareAnalyzer.js # Motor de análisis heurístico
-├── frontend/                  # Login, registro y paneles
-├── Database/sacm.sql          # Esquema y datos iniciales
-├── muestras_seguras/          # Muestras de prueba INOFENSIVAS (solo texto)
-└── analysis_outputs/          # Resultados de ejemplo de esas muestras
+├── src/                        # Backend (Node.js + Express 5)
+│   ├── app.js / server.js      # Aplicación, CSP y arranque
+│   ├── config/                 # Variables de entorno validadas y pool MySQL
+│   ├── middleware/             # Autenticación, roles, validación, límites y errores
+│   ├── modules/                # Un módulo por dominio: rutas + servicio
+│   │   ├── auth/  profile/  users/  audit/  system/
+│   │   ├── analyses/           # Envíos, reportes, revisiones y panel
+│   │   ├── analytics/          # Tendencias, IOC y exportación CSV
+│   │   └── cases/              # Casos de investigación
+│   ├── analysis/               # Motor de análisis (independiente de la base de datos)
+│   │   ├── static/             # Hashes, entropía, tipo real, cadenas/IOC, lector PE
+│   │   ├── rules/              # 25 reglas + mapeo MITRE ATT&CK
+│   │   ├── providers/          # VirusTotal, MalwareBazaar, URLhaus, CIRCL
+│   │   ├── scoring.js          # Puntaje explicable
+│   │   ├── pipeline.js         # Ejecuta y guarda un análisis
+│   │   └── queue.js            # Cola en segundo plano
+│   └── utils/
+├── public/                     # Frontend (HTML + CSS + JavaScript con módulos ES)
+│   ├── index.html  login.html  register.html  app.html
+│   └── assets/
+│       ├── css/                # tokens, base, componentes, layout, páginas, animaciones
+│       └── js/
+│           ├── core/           # API, sesión, enrutador, plantillas seguras, formatos
+│           ├── ui/             # Iconos, gráficas, modales, toasts, componentes
+│           ├── layout/         # Barra lateral y superior
+│           └── pages/          # Una vista por sección
+├── database/migrations/        # Esquema versionado y datos de referencia
+├── scripts/                    # Migrar, datos demo, importar v1, crear usuario, etc.
+├── samples/                    # Muestras de prueba INOFENSIVAS
+└── tests/                      # Pruebas del motor (node:test)
 ```
 
-## Cómo ejecutarlo
+### Base de datos (MySQL 8, normalizada)
+`roles` · `users` · `user_profiles` · `samples` (un registro por SHA-256) · `analyses` · `engine_results` (resultado de cada motor) · `indicators` (IOC) · `rule_matches` · `mitre_techniques` · `analysis_techniques` · `analysis_reviews` · `cases` · `case_analyses` · `case_notes` · `audit_logs` · `schema_migrations`.
 
-**Requisitos:** Node.js 18 o superior y MySQL 8.
+## 🚀 Cómo ejecutarlo
 
-1. **Base de datos:** ejecuta el script en MySQL (Workbench o consola):
+**Requisitos:** Node.js 20 o superior y MySQL 8.
+
+1. Instala las dependencias:
    ```bash
-   mysql -u root -p < Database/sacm.sql
+   npm install
    ```
-
-2. **Variables de entorno:** copia `Backend/.env.example` como `Backend/.env` y completa tus datos. Para generar un `JWT_SECRET` seguro:
+2. Copia `.env.example` como `.env` y completa los datos de MySQL y un `JWT_SECRET`.
+3. Crea la base de datos con usuarios y datos de demostración:
    ```bash
-   node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+   npm run db:setup
    ```
-
-3. **Dependencias:**
    ```bash
-   npm run setup
+   npm run db:seed:demo
    ```
-
-4. **Crea el super admin** (los usuarios que se registran desde la web quedan con rol `USER`):
-   ```bash
-   npm run create-admin -- "Tu Nombre" admin@ejemplo.com "Contrasena123"
-   ```
-
-5. **Inicia el backend** (queda en `http://localhost:5000`):
+4. Inicia el servidor:
    ```bash
    npm start
    ```
+5. Abre **http://localhost:5000**. El backend sirve también el frontend; no necesitas Live Server.
 
-6. **Abre el frontend:** abre `frontend/login.html` en el navegador, o sírvelo con la extensión Live Server de VS Code.
+### Cuentas de demostración
+Todas usan la contraseña `Sacm2026!`. Son solo para tu entorno local.
 
-## Probar con las muestras seguras
+| Rol | Correo |
+|---|---|
+| Super administrador | `superadmin@sacm.local` |
+| Administrador | `admin@sacm.local` |
+| Analista | `analista@sacm.local` |
+| Usuario | `usuario@sacm.local` |
 
-La carpeta `muestras_seguras/` trae archivos de texto **sin código malicioso real**. Solo contienen palabras clave que activan las firmas de ransomware, spyware y worm. Súbelos desde el panel de usuario, o analízalos por consola:
+### Activar la inteligencia externa
+CIRCL funciona sin configurar nada. Para las demás, crea una cuenta gratuita y pega la clave en `.env`:
 
-```bash
-npm --prefix Backend run analyze-samples
-```
-
-| Muestra | Clasificación | Riesgo |
+| Servicio | Variable | Registro |
 |---|---|---|
-| `ransomware_demo.txt` | Ransomware | 95 % |
-| `spyware_demo.txt` | Spyware | 85 % |
-| `worm_demo.txt` | Worm | 80 % |
+| VirusTotal | `VIRUSTOTAL_API_KEY` | https://www.virustotal.com/gui/join-us |
+| MalwareBazaar y URLhaus | `ABUSECH_AUTH_KEY` | https://auth.abuse.ch/ |
 
-## API principal
+Luego, en **Sistema → Probar conexión** (super administrador) puedes verificar cada una.
+
+### Scripts útiles
+| Comando | Para qué |
+|---|---|
+| `npm run dev` | Servidor que se reinicia al guardar cambios |
+| `npm test` | Pruebas del motor de análisis |
+| `npm run samples:analyze` | Analiza las muestras de `samples/` por consola |
+| `npm run db:import-legacy` | Importa los usuarios de SACM v1 (conservan su contraseña) |
+| `npm run user:create -- "Nombre" correo@x.com "Clave1234" ANALYST` | Crea un usuario |
+| `npm run user:reset-password -- correo@x.com "NuevaClave123"` | Cambia una contraseña y desbloquea la cuenta |
+
+### Probar una detección
+En **Analizar archivo** usa **"Probar con EICAR"**: genera el archivo de prueba estándar de los antivirus (inofensivo) y SACM lo marca como malicioso con 100 de riesgo. Las muestras de `samples/` son textos con palabras clave que activan las reglas de ransomware, spyware y gusano.
+
+## 📡 API principal
 
 | Método | Ruta | Acceso |
 |---|---|---|
-| POST | `/api/auth/register` | Público |
-| POST | `/api/auth/login` | Público |
-| POST | `/api/files/upload` | Usuario autenticado |
-| GET | `/api/files/my-analysis` | Usuario autenticado |
-| GET | `/api/files/analysis/:id` | Dueño del análisis o ADMIN/ANALYST |
-| GET | `/api/dashboard/stats` | SUPER_ADMIN, ADMIN, ANALYST |
-| GET | `/api/dashboard/users` | SUPER_ADMIN, ADMIN, ANALYST |
-| DELETE | `/api/dashboard/users/:id` | SUPER_ADMIN, ADMIN |
-| PUT | `/api/dashboard/users/:id/role` | SUPER_ADMIN |
+| POST | `/api/auth/register` · `/api/auth/login` · `/api/auth/logout` | Público / sesión |
+| GET · PATCH | `/api/profile` | Sesión |
+| PUT | `/api/profile/password` · `/api/profile/avatar` | Sesión |
+| POST · GET | `/api/analyses` | Sesión (el usuario ve solo los suyos) |
+| GET | `/api/analyses/:id` · `/:id/status` · `/:id/report` | Dueño o analista |
+| POST | `/api/analyses/:id/reviews` · `/:id/reanalyze` | Analista |
+| GET | `/api/analytics/overview` · `/iocs` · `/export.csv` | Analista |
+| CRUD | `/api/cases` (+ `/notes`, `/analyses`) | Analista |
+| CRUD | `/api/admin/users` | Administrador |
+| GET | `/api/admin/audit` · `/api/system/overview` | Administrador |
+| POST | `/api/system/integrations/:id/test` | Super administrador |
 
-## Próximas mejoras
+## 🧭 Próximas mejoras
+- Reglas YARA reales con `yara-x`.
+- Análisis dinámico en sandbox (por ejemplo, CAPE o Hybrid Analysis).
+- Notificaciones en tiempo real con WebSockets.
+- Despliegue con Docker y pipeline de CI.
 
-- Integrar hashes contra bases públicas (por ejemplo, la API de VirusTotal).
-- Reglas YARA para el análisis de contenido.
-- Eliminar el archivo del disco después de analizarlo.
-- Pruebas automatizadas y despliegue con Docker.
+> ⚠️ SACM es una herramienta educativa y de apoyo; no reemplaza un antivirus ni un EDR.
