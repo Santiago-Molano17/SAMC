@@ -1,0 +1,125 @@
+/* =====================================================================
+   Tokens de diseño: colores, tipografía, espacios, sombras y movimiento
+   ===================================================================== */
+
+@import url("/vendor/fonts/inter/index.css");
+@import url("/vendor/fonts/jetbrains-mono/index.css");
+
+:root {
+    --font-sans: "Inter Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+    /* Tema oscuro (por defecto) */
+    --bg: #070b16;
+    --bg-elevated: #0c1222;
+    --surface: rgba(17, 25, 45, 0.72);
+    --surface-solid: #111a2e;
+    --surface-hover: rgba(30, 42, 70, 0.75);
+    --surface-sunken: rgba(5, 9, 20, 0.6);
+    --border: rgba(148, 163, 184, 0.12);
+    --border-strong: rgba(148, 163, 184, 0.24);
+
+    --text: #e6ebf5;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+
+    --primary: #22d3ee;
+    --primary-strong: #06b6d4;
+    --primary-soft: rgba(34, 211, 238, 0.12);
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.14);
+    --gradient: linear-gradient(135deg, #22d3ee 0%, #6366f1 55%, #a855f7 100%);
+    --gradient-soft: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(168, 85, 247, 0.16));
+
+    --danger: #f43f5e;
+    --danger-soft: rgba(244, 63, 94, 0.14);
+    --warning: #f59e0b;
+    --warning-soft: rgba(245, 158, 11, 0.14);
+    --success: #10b981;
+    --success-soft: rgba(16, 185, 129, 0.14);
+    --info: #3b82f6;
+    --info-soft: rgba(59, 130, 246, 0.14);
+
+    --verdict-malicious: var(--danger);
+    --verdict-suspicious: var(--warning);
+    --verdict-clean: var(--success);
+    --verdict-pending: var(--text-muted);
+
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
+    --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border);
+    --glow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 8px 30px -6px rgba(34, 211, 238, 0.35);
+
+    --blur: blur(18px) saturate(140%);
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+
+    --sidebar-width: 272px;
+    --topbar-height: 68px;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --duration: 220ms;
+
+    --chart-grid: rgba(148, 163, 184, 0.1);
+    --chart-text: #94a3b8;
+
+    color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+    --bg: #f3f6fb;
+    --bg-elevated: #ffffff;
+    --surface: rgba(255, 255, 255, 0.82);
+    --surface-solid: #ffffff;
+    --surface-hover: rgba(241, 245, 249, 0.95);
+    --surface-sunken: rgba(226, 232, 240, 0.55);
+    --border: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.16);
+
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-subtle: #94a3b8;
+
+    --primary: #0891b2;
+    --primary-strong: #0e7490;
+    --primary-soft: rgba(8, 145, 178, 0.1);
+    --accent: #7c3aed;
+    --accent-soft: rgba(124, 58, 237, 0.1);
+    --gradient: linear-gradient(135deg, #0891b2 0%, #4f46e5 55%, #9333ea 100%);
+    --gradient-soft: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(147, 51, 234, 0.1));
+
+    --danger: #e11d48;
+    --warning: #d97706;
+    --success: #059669;
+    --info: #2563eb;
+
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px var(--border);
+    --shadow-lg: 0 24px 60px -24px rgba(15, 23, 42, 0.28), 0 0 0 1px var(--border);
+    --glow: 0 0 0 1px rgba(8, 145, 178, 0.35), 0 8px 30px -10px rgba(8, 145, 178, 0.35);
+
+    --chart-grid: rgba(15, 23, 42, 0.08);
+    --chart-text: #64748b;
+
+    color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration: 0ms;
+    }
+}
