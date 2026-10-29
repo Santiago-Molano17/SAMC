@@ -1,0 +1,10 @@
+{
+  "name": "sacm",
+  "private": true,
+  "description": "SACM - Sistema de Análisis y Control de Malware",
+  "scripts": {
+    "setup": "npm --prefix Backend install",
+    "start": "npm --prefix Backend start",
+    "create-admin": "npm --prefix Backend run create-admin --"
+  }
+}

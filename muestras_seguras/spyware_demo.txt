@@ -1,0 +1,8 @@
+// SIMULACION SEGURA PARA SACM
+// Este archivo NO captura teclado, pantalla ni credenciales reales.
+// Contiene marcadores para probar la deteccion: spyware, keylog, password, screen, data_exfiltration.
+
+function demoSpywareImpact() {
+  console.log("keylog password capture screen credentials");
+  console.log("data_exfiltration to remote server");
+}

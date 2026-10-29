@@ -1,0 +1,40 @@
+{
+  "filename": "spyware_demo.txt",
+  "filesize": 351,
+  "mimetype": "application/octet-stream",
+  "malware_type": "Spyware",
+  "risk_level": "Critical",
+  "risk_percentage": 85,
+  "vulnerabilities": [
+    "Riesgo de robo de información personal",
+    "Monitoreo de actividades del usuario"
+  ],
+  "behaviors": [
+    "data_exfiltration",
+    "anti_analysis",
+    "persistence_mechanisms",
+    "data_exfiltration",
+    "anti_analysis",
+    "persistence_mechanisms",
+    "system_modification",
+    "registry_manipulation",
+    "persistence_mechanisms"
+  ],
+  "affected_system_areas": [
+    "Datos Personales",
+    "Credenciales",
+    "Historial del Navegador",
+    "Archivos del Sistema",
+    "Registro de Windows",
+    "Inicio del Sistema"
+  ],
+  "detected_capabilities": [
+    "Registro de teclado",
+    "Captura de pantalla",
+    "Monitoreo de navegación",
+    "Robo de credenciales"
+  ],
+  "recommendation": "⚠️ CRÍTICO: Spyware detectado. ELIMINAR INMEDIATAMENTE. No ejecutar bajo ninguna circunstancia.",
+  "is_malware": true,
+  "detection_confidence": 85
+}

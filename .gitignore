@@ -1,0 +1,20 @@
+# Dependencias y entornos
+node_modules/
+.venv/
+venv/
+
+# Secretos: nunca subir el .env real
+.env
+*.env
+!.env.example
+
+# Archivos subidos por usuarios (pueden ser malware o datos personales)
+Backend/uploads/*
+!Backend/uploads/.gitkeep
+
+# Documentos académicos y temporales
+*.docx
+~$*
+*.log
+.DS_Store
+Thumbs.db

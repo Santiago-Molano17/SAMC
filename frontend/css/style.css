@@ -1,0 +1,35 @@
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.sidebar{
+    width: 250px;
+    min-height: 100vh;
+}
+
+.nav-link{
+    font-size: 18px;
+}
+
+.main-content{
+    background-color: #f5f5f5;
+}
+
+.card{
+    border: none;
+    border-radius: 15px;
+}
+
+table{
+    background-color: white;
+}
+
+.alert-container {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    font-size: 0.95rem;
+}

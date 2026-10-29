@@ -1,0 +1,32 @@
+{
+  "filename": "worm_demo.txt",
+  "filesize": 300,
+  "mimetype": "application/octet-stream",
+  "malware_type": "Worm",
+  "risk_level": "Critical",
+  "risk_percentage": 80,
+  "vulnerabilities": [
+    "Archivo aparentemente seguro"
+  ],
+  "behaviors": [
+    "network_propagation",
+    "privilege_escalation",
+    "network_propagation",
+    "privilege_escalation"
+  ],
+  "affected_system_areas": [
+    "Conexiones de Red",
+    "Recursos Compartidos",
+    "Permisos del Sistema",
+    "Control de Cuentas"
+  ],
+  "detected_capabilities": [
+    "Auto-replicación",
+    "Escaneo de red",
+    "Propagación automática",
+    "Consumo de ancho de banda"
+  ],
+  "recommendation": "⚠️ CRÍTICO: Worm detectado. ELIMINAR INMEDIATAMENTE. No ejecutar bajo ninguna circunstancia.",
+  "is_malware": true,
+  "detection_confidence": 80
+}

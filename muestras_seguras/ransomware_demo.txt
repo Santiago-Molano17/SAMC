@@ -1,0 +1,9 @@
+// SIMULACION SEGURA PARA SACM
+// Este archivo NO cifra archivos ni ejecuta acciones reales.
+// Contiene marcadores para probar la deteccion: ransomware, encrypt, ransom, bitcoin, file_encryption.
+
+function demoRansomwareImpact() {
+  const objetivos = ["Documents", "Pictures", "Desktop"];
+  console.log("encrypt files", objetivos);
+  console.log("ransom note: pay bitcoin to decrypt");
+}

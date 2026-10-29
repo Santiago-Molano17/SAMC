@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SACM - Panel Administrativo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./css/admin-dashboard.css">
+</head>
+
+<body class="bg-light">
+
+<div class="d-flex min-vh-100">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar bg-gradient text-white p-4">
+        <div class="mb-4">
+            <h3 class="mb-1">
+                <i class="fas fa-lock"></i> SACM ADMIN
+            </h3>
+            <small>Panel Administrativo</small>
+        </div>
+
+        <div class="user-info mb-4 p-3 bg-white bg-opacity-10 rounded">
+            <p class="mb-0 small" id="userDisplay"></p>
+            <span class="badge bg-success" id="roleDisplay"></span>
+        </div>
+
+        <nav class="nav flex-column gap-2">
+            <a href="#" class="nav-link text-white active" data-section="dashboard">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="#" class="nav-link text-white" data-section="analysis">
+                <i class="fas fa-microscope"></i> Análisis
+            </a>
+            <a href="#" class="nav-link text-white" data-section="users">
+                <i class="fas fa-users"></i> Usuarios
+            </a>
+            <a href="#" class="nav-link text-white" data-section="profiles">
+                <i class="fas fa-user-tie"></i> Perfiles
+            </a>
+            <a href="#" class="nav-link text-white" data-section="reports">
+                <i class="fas fa-file-pdf"></i> Reportes
+            </a>
+            <a href="#" class="nav-link text-white" data-section="logs">
+                <i class="fas fa-history"></i> Logs
+            </a>
+            <hr class="bg-white bg-opacity-25">
+            <a href="#" class="nav-link text-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-grow-1">
+
+        <!-- NAVBAR -->
+        <nav class="navbar bg-white shadow-sm">
+            <div class="container-fluid px-4">
+                <h5 class="mb-0" id="pageTitle">Dashboard</h5>
+                <span id="username" class="badge bg-primary"></span>
+            </div>
+        </nav>
+
+        <!-- CONTENT -->
+        <div class="container-fluid p-4">
+
+            <!-- DASHBOARD STATS -->
+            <div id="dashboard-section" class="section-content">
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-primary">
+                            <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                            <div>
+                                <h6>Total Análisis</h6>
+                                <h3 id="totalAnalysis">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-danger">
+                            <div class="stat-icon"><i class="fas fa-virus"></i></div>
+                            <div>
+                                <h6>Crítico</h6>
+                                <h3 id="criticalCount">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-warning">
+                            <div class="stat-icon"><i class="fas fa-exclamation"></i></div>
+                            <div>
+                                <h6>Alto Riesgo</h6>
+                                <h3 id="highCount">0</h3>
+                            </div>
+                    </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-info">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div>
+                                <h6>Usuarios</h6>
+                                <h3 id="totalUsers">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">Tipos de Malware</h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="malwareChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">Niveles de Riesgo</h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="riskChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">Análisis Recientes</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Archivo</th>
+                                            <th>Usuario</th>
+                                            <th>Tipo</th>
+                                            <th>Riesgo</th>
+                                            <th>Porcentaje</th>
+                                            <th>Fecha</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentAnalysisTable">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYSIS DETAILS -->
+            <div id="analysis-section" class="section-content d-none">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Gestión de Análisis</h6>
+                        <input type="search" class="form-control form-control-sm" style="width: 250px;" placeholder="Buscar análisis..." id="analysisSearch">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Archivo</th>
+                                    <th>Usuario</th>
+                                    <th>Tipo Malware</th>
+                                    <th>Nivel</th>
+                                    <th>%</th>
+                                    <th>Fecha</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analysisTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USERS MANAGEMENT -->
+            <div id="users-section" class="section-content d-none">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Gestión de Usuarios</h6>
+                        <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#newUserModal">
+                            <i class="fas fa-plus"></i> Nuevo Usuario
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Registrado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILES -->
+            <div id="profiles-section" class="section-content d-none">
+                <div class="row" id="profilesList">
+                </div>
+            </div>
+
+            <!-- REPORTS -->
+            <div id="reports-section" class="section-content d-none">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Reportes</h6>
+                        <button class="btn btn-sm btn-light" onclick="generateReport()">
+                            <i class="fas fa-download"></i> Generar Reporte
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="reportContent">
+                            <p class="text-muted">Selecciona un tipo de reporte...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOGS -->
+            <div id="logs-section" class="section-content d-none">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">Logs de Actividad</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Acción</th>
+                                    <th>Detalles</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- MODALS -->
+
+<!-- View Analysis Modal -->
+<div class="modal fade" id="viewAnalysisModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Detalles del Análisis</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="analysisDetailContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New User Modal -->
+<div class="modal fade" id="newUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Crear Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newUserForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña temporal</label>
+                        <input type="password" class="form-control" minlength="8" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rol</label>
+                        <select class="form-select" required>
+                            <option value="USER">Usuario</option>
+                            <option value="ANALYST">Analista</option>
+                            <option value="ADMIN">Administrador</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Crear</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/admin-dashboard.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SACM - Panel de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/user-dashboard.css">
+</head>
+
+<body class="bg-light">
+
+<div class="d-flex min-vh-100">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar bg-gradient text-white p-4">
+        <div class="mb-4">
+            <h3 class="mb-1">
+                <i class="fas fa-shield-alt"></i> SACM
+            </h3>
+            <small>Análisis de Malware</small>
+        </div>
+
+        <div class="user-info mb-4 p-3 bg-white bg-opacity-10 rounded">
+            <p class="mb-0 small" id="userDisplay"></p>
+        </div>
+
+        <nav class="nav flex-column gap-2">
+            <a href="#" class="nav-link text-white active" data-section="uploads">
+                <i class="fas fa-upload"></i> Cargar Archivo
+            </a>
+            <a href="#" class="nav-link text-white" data-section="analysis">
+                <i class="fas fa-chart-bar"></i> Mis Análisis
+            </a>
+            <a href="#" class="nav-link text-white" data-section="simulator">
+                <i class="fas fa-cube"></i> Simulador
+            </a>
+            <hr class="bg-white bg-opacity-25">
+            <a href="#" class="nav-link text-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-grow-1">
+
+        <!-- NAVBAR -->
+        <nav class="navbar bg-white shadow-sm">
+            <div class="container-fluid px-4">
+                <h5 class="mb-0" id="pageTitle">Cargar Archivo</h5>
+                <span id="username" class="badge bg-primary"></span>
+            </div>
+        </nav>
+
+        <!-- CONTENT -->
+        <div class="container-fluid p-4">
+
+            <!-- SECTION: UPLOAD FILES -->
+            <div id="uploads-section" class="section-content">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-gradient text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-file-upload"></i> Analizar Archivo o Código
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="uploadForm">
+                                    <div class="upload-area border-2 border-dashed rounded p-5 text-center" id="uploadArea">
+                                        <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-muted"></i>
+                                        <p class="mb-2">Arrastra tu archivo aquí o haz clic para seleccionar</p>
+                                        <small class="text-muted">Máximo 50MB. Formatos: exe, dll, js, py, zip, etc.</small>
+                                        <input type="file" id="file" class="d-none" required>
+                                    </div>
+
+                                    <div id="fileSelected" class="alert alert-info d-none mt-3">
+                                        <strong>Archivo seleccionado:</strong> <span id="fileName"></span>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                                        <i class="fas fa-magnifying-glass"></i> Analizar
+                                    </button>
+                                </form>
+
+                                <!-- ANALYZING PROGRESS -->
+                                <div id="analyzingProgress" class="d-none mt-4">
+                                    <p class="text-center mb-3">Analizando archivo...</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- PASTE CODE -->
+                                <div class="mt-4 pt-4 border-top">
+                                    <h6 class="mb-3">O Pega tu Código:</h6>
+                                    <textarea id="codeInput" class="form-control mb-2" rows="8" placeholder="Pega aquí el código a analizar..."></textarea>
+                                    <button type="button" class="btn btn-outline-primary" id="analyzeCodeBtn">
+                                        Analizar Código
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: MY ANALYSIS -->
+            <div id="analysis-section" class="section-content d-none">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">
+                            <i class="fas fa-history"></i> Mis Análisis Recientes
+                        </h4>
+                    </div>
+                </div>
+
+                <div id="analysisList" class="row">
+                    <!-- Análisis se cargarán aquí -->
+                </div>
+
+                <div id="noAnalysis" class="alert alert-info text-center">
+                    <i class="fas fa-inbox"></i> No tienes análisis aún
+                </div>
+            </div>
+
+            <!-- SECTION: SIMULATOR -->
+            <div id="simulator-section" class="section-content d-none">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">
+                            <i class="fas fa-cube"></i> Simulador de Impacto de Malware
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4">
+                                <h6 class="mb-4">Selecciona un análisis para ver el simulador:</h6>
+                                <select id="simulatorSelect" class="form-select mb-4">
+                                    <option value="">-- Selecciona un análisis --</option>
+                                </select>
+
+                                <div id="simulatorContent" class="d-none">
+                                    <!-- Simulator visualization -->
+                                    <div class="simulator-container mb-4">
+                                        <div class="system-preview">
+                                            <div class="computer-screen">
+                                                <div class="screen-content" id="simulatorScreen">
+                                                    <!-- Simulación aquí -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <h6>Procesos Afectados:</h6>
+                                            <div id="affectedProcesses" class="list-group small">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Archivos en Riesgo:</h6>
+                                            <div id="affectedFiles" class="list-group small">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-primary w-100 mt-4" id="playSimulatorBtn">
+                                        <i class="fas fa-play"></i> Reproducir Simulación
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- RESULT MODAL -->
+<div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="resultTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/user-dashboard.js"></script>
+
+</body>
+</html>

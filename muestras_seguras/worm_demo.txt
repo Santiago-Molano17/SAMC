@@ -1,0 +1,8 @@
+// SIMULACION SEGURA PARA SACM
+// Este archivo NO escanea red ni se replica realmente.
+// Contiene marcadores para probar la deteccion: worm, propagate, replicate, network, spread.
+
+function demoWormImpact() {
+  console.log("network scan");
+  console.log("replicate and spread to shared folders");
+}
