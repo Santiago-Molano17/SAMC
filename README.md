@@ -6,7 +6,7 @@ Es un proyecto académico de **Fundamentos de Seguridad Informática**, construi
 
 >  SACM es una herramienta educativa. El motor usa firmas y heurísticas simples; **no reemplaza un antivirus**.
 
-<!-- Agrega aquí tus capturas, por ejemplo:
+
 <img width="1364" height="638" alt="image" src="https://github.com/user-attachments/assets/66c4ae74-a5da-4d80-b826-3f1b3b17264b" />
 <img width="1357" height="638" alt="image" src="https://github.com/user-attachments/assets/2729e979-0c7f-4152-8aee-6e6ee04a519a" />
 <img width="1358" height="619" alt="image" src="https://github.com/user-attachments/assets/01997235-d11c-4a3e-848e-ebba72130a45" />
